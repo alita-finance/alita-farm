@@ -5,8 +5,9 @@ import '@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol';
 import '@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol';
 import '@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol';
 
-// import "./alitaToken.sol";
+import "./ALIToken.sol";
 import "./Staking.sol";
+
 
 // import "@nomiclabs/buidler/console.sol";
 
@@ -33,10 +34,10 @@ contract MasterChef is Ownable {
         // We do some fancy math here. Basically, any point in time, the amount of alitas
         // entitled to a user but is pending to be distributed is:
         //
-        //   pending reward = (user.amount * pool.accalitaPerShare) - user.rewardDebt
+        //   pending reward = (user.amount * pool.accALIPerShare) - user.rewardDebt
         //
         // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accalitaPerShare` (and `lastRewardBlock`) gets updated.
+        //   1. The pool's `accALIPerShare` (and `lastRewardBlock`) gets updated.
         //   2. User receives the pending reward sent to his/her address.
         //   3. User's `amount` gets updated.
         //   4. User's `rewardDebt` gets updated.
@@ -47,11 +48,11 @@ contract MasterChef is Ownable {
         IBEP20 lpToken;           // Address of LP token contract.
         uint256 allocPoint;       // How many allocation points assigned to this pool. alitas to distribute per block.
         uint256 lastRewardBlock;  // Last block number that alitas distribution occurs.
-        uint256 accalitaPerShare; // Accumulated alitas per share, times 1e12. See below.
+        uint256 accALIPerShare; // Accumulated alitas per share, times 1e12. See below.
     }
 
     // The alita TOKEN!
-    address public alita;
+    AliToken public alita;
     Staking public staking;
     // alita tokens created per block.
     uint256 public alitaPerBlock;
@@ -74,7 +75,7 @@ contract MasterChef is Ownable {
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     constructor(
-        address _alita,
+        AliToken _alita,
         Staking _staking,
         uint256 _alitaPerBlock,
         uint256 _startBlock
@@ -89,7 +90,7 @@ contract MasterChef is Ownable {
             lpToken: IBEP20(_alita),
             allocPoint: 1000,
             lastRewardBlock: startBlock,
-            accalitaPerShare: 0
+            accALIPerShare: 0
         }));
 
         totalAllocPoint = 1000;
@@ -116,9 +117,9 @@ contract MasterChef is Ownable {
             lpToken: _lpToken,
             allocPoint: _allocPoint,
             lastRewardBlock: lastRewardBlock,
-            accalitaPerShare: 0
+            accALIPerShare: 0
         }));
-        // updateStakingPool();
+        updateStakingPool();
     }
 
     // Update the given pool's alita allocation point. Can only be called by the owner.
@@ -130,22 +131,22 @@ contract MasterChef is Ownable {
         poolInfo[_pid].allocPoint = _allocPoint;
         if (prevAllocPoint != _allocPoint) {
             totalAllocPoint = totalAllocPoint.sub(prevAllocPoint).add(_allocPoint);
-            // updateStakingPool();
+            updateStakingPool();
         }
     }
 
-    // function updateStakingPool() internal {
-    //     uint256 length = poolInfo.length;
-    //     uint256 points = 0;
-    //     for (uint256 pid = 1; pid < length; ++pid) {
-    //         points = points.add(poolInfo[pid].allocPoint);
-    //     }
-    //     if (points != 0) {
-    //         points = points.div(3);
-    //         totalAllocPoint = totalAllocPoint.sub(poolInfo[0].allocPoint).add(points);
-    //         poolInfo[0].allocPoint = points;
-    //     }
-    // }
+    function updateStakingPool() internal {
+        uint256 length = poolInfo.length;
+        uint256 points = 0;
+        for (uint256 pid = 1; pid < length; ++pid) {
+            points = points.add(poolInfo[pid].allocPoint);
+        }
+        if (points != 0) {
+            points = points.div(2);
+            totalAllocPoint = totalAllocPoint.sub(poolInfo[0].allocPoint).add(points);
+            poolInfo[0].allocPoint = points;
+        }
+    }
 
     // Set the migrator contract. Can only be called by the owner.
     function setMigrator(IMigratorChef _migrator) public onlyOwner {
@@ -164,23 +165,30 @@ contract MasterChef is Ownable {
         pool.lpToken = newLpToken;
     }
 
+    // Return current block reward.
+    function getALIBlockReward() public view returns (uint256) {
+        uint256 interval = now.sub(alita.releaseDate());
+        uint256 currentPeriod = interval.div(alita.period());
+        return alita.getReleasedTokenperPeriod(currentPeriod).div(2);
+    }
+
     // Return reward multiplier over the given _from to _to block.
     function getMultiplier(uint256 _from, uint256 _to) public view returns (uint256) {
         return _to.sub(_from).mul(BONUS_MULTIPLIER);
     }
 
     // View function to see pending alitas on frontend.
-    function pendingalita(uint256 _pid, address _user) external view returns (uint256) {
+    function pendingALI(uint256 _pid, address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
-        uint256 accalitaPerShare = pool.accalitaPerShare;
+        uint256 accALIPerShare = pool.accALIPerShare;
         uint256 lpSupply = pool.lpToken.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-            uint256 alitaReward = multiplier.mul(alitaPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-            accalitaPerShare = accalitaPerShare.add(alitaReward.mul(1e12).div(lpSupply));
+            uint256 alitaReward = multiplier.mul(getALIBlockReward()).mul(pool.allocPoint).div(totalAllocPoint);
+            accALIPerShare = accALIPerShare.add(alitaReward.mul(1e12).div(lpSupply));
         }
-        return user.amount.mul(accalitaPerShare).div(1e12).sub(user.rewardDebt);
+        return user.amount.mul(accALIPerShare).div(1e12).sub(user.rewardDebt);
     }
 
     // Update reward variables for all pools. Be careful of gas spending!
@@ -204,9 +212,9 @@ contract MasterChef is Ownable {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 alitaReward = multiplier.mul(alitaPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-        // alita.mint(address(staking), alitaReward);
-        pool.accalitaPerShare = pool.accalitaPerShare.add(alitaReward.mul(1e12).div(lpSupply));
+        uint256 alitaReward = multiplier.mul(getALIBlockReward()).mul(pool.allocPoint).div(totalAllocPoint);
+        alita.mint(address(staking), alitaReward);
+        pool.accALIPerShare = pool.accALIPerShare.add(alitaReward.mul(1e12).div(lpSupply));
         pool.lastRewardBlock = block.number;
     }
 
@@ -219,7 +227,7 @@ contract MasterChef is Ownable {
         UserInfo storage user = userInfo[_pid][msg.sender];
         updatePool(_pid);
         if (user.amount > 0) {
-            uint256 pending = user.amount.mul(pool.accalitaPerShare).div(1e12).sub(user.rewardDebt);
+            uint256 pending = user.amount.mul(pool.accALIPerShare).div(1e12).sub(user.rewardDebt);
             if(pending > 0) {
                 safeTransfer(msg.sender, pending);
             }
@@ -228,7 +236,7 @@ contract MasterChef is Ownable {
             pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
             user.amount = user.amount.add(_amount);
         }
-        user.rewardDebt = user.amount.mul(pool.accalitaPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accALIPerShare).div(1e12);
         emit Deposit(msg.sender, _pid, _amount);
     }
 
@@ -241,7 +249,7 @@ contract MasterChef is Ownable {
         require(user.amount >= _amount, "withdraw: not good");
 
         updatePool(_pid);
-        uint256 pending = user.amount.mul(pool.accalitaPerShare).div(1e12).sub(user.rewardDebt);
+        uint256 pending = user.amount.mul(pool.accALIPerShare).div(1e12).sub(user.rewardDebt);
         if(pending > 0) {
             safeTransfer(msg.sender, pending);
         }
@@ -249,7 +257,7 @@ contract MasterChef is Ownable {
             user.amount = user.amount.sub(_amount);
             pool.lpToken.safeTransfer(address(msg.sender), _amount);
         }
-        user.rewardDebt = user.amount.mul(pool.accalitaPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accALIPerShare).div(1e12);
         emit Withdraw(msg.sender, _pid, _amount);
     }
 
@@ -259,7 +267,7 @@ contract MasterChef is Ownable {
         UserInfo storage user = userInfo[0][msg.sender];
         updatePool(0);
         if (user.amount > 0) {
-            uint256 pending = user.amount.mul(pool.accalitaPerShare).div(1e12).sub(user.rewardDebt);
+            uint256 pending = user.amount.mul(pool.accALIPerShare).div(1e12).sub(user.rewardDebt);
             if(pending > 0) {
                 safeTransfer(msg.sender, pending);
             }
@@ -268,7 +276,7 @@ contract MasterChef is Ownable {
             pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
             user.amount = user.amount.add(_amount);
         }
-        user.rewardDebt = user.amount.mul(pool.accalitaPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accALIPerShare).div(1e12);
 
         // staking.mint(msg.sender, _amount);
         emit Deposit(msg.sender, 0, _amount);
@@ -280,7 +288,7 @@ contract MasterChef is Ownable {
         UserInfo storage user = userInfo[0][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
         updatePool(0);
-        uint256 pending = user.amount.mul(pool.accalitaPerShare).div(1e12).sub(user.rewardDebt);
+        uint256 pending = user.amount.mul(pool.accALIPerShare).div(1e12).sub(user.rewardDebt);
         if(pending > 0) {
             safeTransfer(msg.sender, pending);
         }
@@ -288,7 +296,7 @@ contract MasterChef is Ownable {
             user.amount = user.amount.sub(_amount);
             pool.lpToken.safeTransfer(address(msg.sender), _amount);
         }
-        user.rewardDebt = user.amount.mul(pool.accalitaPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accALIPerShare).div(1e12);
 
         // staking.burn(msg.sender, _amount);
         emit Withdraw(msg.sender, 0, _amount);

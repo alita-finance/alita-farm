@@ -15,9 +15,9 @@ contract Staking is Ownable{
 
     // just in case if not have enough CAKEs.
     function safeTransfer(address _to, uint256 _amount) public onlyOwner {
-        uint256 cakeBal = IBEP20(alita).balanceOf(address(this));
-        if (_amount > cakeBal) {
-            IBEP20(alita).transfer(_to, cakeBal);
+        uint256 aliBal = IBEP20(alita).balanceOf(address(this));
+        if (_amount > aliBal) {
+            IBEP20(alita).transfer(_to, aliBal);
         } else {
             IBEP20(alita).transfer(_to, _amount);
         }
