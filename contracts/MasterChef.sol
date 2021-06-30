@@ -8,17 +8,16 @@ import '@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol';
 import "./ALIToken.sol";
 import "./Staking.sol";
 
-
 // import "@nomiclabs/buidler/console.sol";
 
 interface IMigratorChef {
     function migrate(IBEP20 token) external returns (IBEP20);
 }
 
-// MasterChef is the master of alita. He can make alita and he is a fair guy.
+// MasterChef is the master of ali. He can make ali and he is a fair guy.
 //
 // Note that it's ownable and the owner wields tremendous power. The ownership
-// will be transferred to a governance smart contract once alita is sufficiently
+// will be transferred to a governance smart contract once ali is sufficiently
 // distributed and the community can show to govern itself.
 //
 // Have fun reading it. Hopefully it's bug-free. God bless.
@@ -51,12 +50,12 @@ contract MasterChef is Ownable {
         uint256 accALIPerShare; // Accumulated alitas per share, times 1e12. See below.
     }
 
-    // The alita TOKEN!
-    AliToken public alita;
+    // The ali TOKEN!
+    AliToken public ali;
     Staking public staking;
-    // alita tokens created per block.
-    uint256 public alitaPerBlock;
-    // Bonus muliplier for early alita makers.
+    // ali tokens created per block.
+    // uint256 public alitaPerBlock;
+    // Bonus muliplier for early ali makers.
     uint256 public BONUS_MULTIPLIER = 1;
     // The migrator contract. It has a lot of power. Can only be set through governance (owner).
     IMigratorChef public migrator;
@@ -67,7 +66,7 @@ contract MasterChef is Ownable {
     mapping (uint256 => mapping (address => UserInfo)) public userInfo;
     // Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint = 0;
-    // The block number when alita mining starts.
+    // The block number when ali mining starts.
     uint256 public startBlock;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -75,19 +74,19 @@ contract MasterChef is Ownable {
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     constructor(
-        AliToken _alita,
+        AliToken _ali,
         Staking _staking,
-        uint256 _alitaPerBlock,
+        // uint256 _alitaPerBlock,
         uint256 _startBlock
     ) public {
-        alita = _alita;
+        ali = _ali;
         staking = _staking;
-        alitaPerBlock = _alitaPerBlock;
+        // alitaPerBlock = _alitaPerBlock;
         startBlock = _startBlock;
 
         // staking pool
         poolInfo.push(PoolInfo({
-            lpToken: IBEP20(_alita),
+            lpToken: IBEP20(_ali),
             allocPoint: 1000,
             lastRewardBlock: startBlock,
             accALIPerShare: 0
@@ -106,7 +105,7 @@ contract MasterChef is Ownable {
     }
 
     // Add a new lp to the pool. Can only be called by the owner.
-    // alita DO NOT add the same LP token more than once. Rewards will be messed up if you do.
+    // ali DO NOT add the same LP token more than once. Rewards will be messed up if you do.
     function add(uint256 _allocPoint, IBEP20 _lpToken, bool _withUpdate) public onlyOwner {
         if (_withUpdate) {
             massUpdatePools();
@@ -122,7 +121,7 @@ contract MasterChef is Ownable {
         updateStakingPool();
     }
 
-    // Update the given pool's alita allocation point. Can only be called by the owner.
+    // Update the given pool's ali allocation point. Can only be called by the owner.
     function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public onlyOwner {
         if (_withUpdate) {
             massUpdatePools();
@@ -165,13 +164,6 @@ contract MasterChef is Ownable {
         pool.lpToken = newLpToken;
     }
 
-    // Return current block reward.
-    function getALIBlockReward() public view returns (uint256) {
-        uint256 interval = now.sub(alita.releaseDate());
-        uint256 currentPeriod = interval.div(alita.period());
-        return alita.getReleasedTokenperPeriod(currentPeriod).div(2);
-    }
-
     // Return reward multiplier over the given _from to _to block.
     function getMultiplier(uint256 _from, uint256 _to) public view returns (uint256) {
         return _to.sub(_from).mul(BONUS_MULTIPLIER);
@@ -185,7 +177,7 @@ contract MasterChef is Ownable {
         uint256 lpSupply = pool.lpToken.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-            uint256 alitaReward = multiplier.mul(getALIBlockReward()).mul(pool.allocPoint).div(totalAllocPoint);
+            uint256 alitaReward = multiplier.mul(getClaimableReward(pool.lastRewardBlock)).mul(pool.allocPoint).div(totalAllocPoint);
             accALIPerShare = accALIPerShare.add(alitaReward.mul(1e12).div(lpSupply));
         }
         return user.amount.mul(accALIPerShare).div(1e12).sub(user.rewardDebt);
@@ -212,16 +204,16 @@ contract MasterChef is Ownable {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 alitaReward = multiplier.mul(getALIBlockReward()).mul(pool.allocPoint).div(totalAllocPoint);
-        alita.mint(address(staking), alitaReward);
+        uint256 alitaReward = multiplier.mul(getClaimableReward(pool.lastRewardBlock)).mul(pool.allocPoint).div(totalAllocPoint);
+        ali.mint(address(staking), alitaReward);
         pool.accALIPerShare = pool.accALIPerShare.add(alitaReward.mul(1e12).div(lpSupply));
         pool.lastRewardBlock = block.number;
     }
 
-    // Deposit LP tokens to MasterChef for alita allocation.
+    // Deposit LP tokens to MasterChef for ali allocation.
     function deposit(uint256 _pid, uint256 _amount) public {
 
-        require (_pid != 0, 'deposit alita by staking');
+        require (_pid != 0, 'deposit ali by staking');
 
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
@@ -243,7 +235,7 @@ contract MasterChef is Ownable {
     // Withdraw LP tokens from MasterChef.
     function withdraw(uint256 _pid, uint256 _amount) public {
 
-        require (_pid != 0, 'withdraw alita by unstaking');
+        require (_pid != 0, 'withdraw ali by unstaking');
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
@@ -261,7 +253,7 @@ contract MasterChef is Ownable {
         emit Withdraw(msg.sender, _pid, _amount);
     }
 
-    // Stake alita tokens to MasterChef
+    // Stake ali tokens to MasterChef
     function enterStaking(uint256 _amount) public {
         PoolInfo storage pool = poolInfo[0];
         UserInfo storage user = userInfo[0][msg.sender];
@@ -282,7 +274,7 @@ contract MasterChef is Ownable {
         emit Deposit(msg.sender, 0, _amount);
     }
 
-    // Withdraw alita tokens from STAKING.
+    // Withdraw ali tokens from STAKING.
     function leaveStaking(uint256 _amount) public {
         PoolInfo storage pool = poolInfo[0];
         UserInfo storage user = userInfo[0][msg.sender];
@@ -312,8 +304,83 @@ contract MasterChef is Ownable {
         user.rewardDebt = 0;
     }
 
-    // Safe alita transfer function, just in case if rounding error causes pool to not have enough alitas.
+    // Safe ali transfer function, just in case if rounding error causes pool to not have enough alitas.
     function safeTransfer(address _to, uint256 _amount) internal {
         staking.safeTransfer(_to, _amount);
+    }
+
+    /**
+     * @notice Returns the result of (base ** exponent) with SafeMath
+     * @param base The base number. Example: 2
+     * @param exponent The exponent used to raise the base. Example: 3
+     * @return A number representing the given base taken to the power of the given exponent. Example: 2 ** 3 = 8
+     */
+    function pow(uint base, uint exponent) internal pure returns (uint) {
+        if (exponent == 0) {
+            return 1;
+        } else if (exponent == 1) {
+            return base;
+        } else if (base == 0 && exponent != 0) {
+            return 0;
+        } else {
+            uint result = base;
+            for (uint i = 1; i < exponent; i++) {
+                result = result.mul(base);
+            }
+            return result;
+        }
+    }
+
+    /**
+     * @notice Caculate the reward per block at the period: (keepPercent / 100) ** period * initialRewardPerBlock
+     * @param periodIndex The period index. The period index must be between [0, maxiumPeriodIndex]
+     * @return A number representing the reward token per block at specific period. Result is scaled by 1e18.
+     */
+    function getRewardPerBlock(uint periodIndex) public view returns (uint) {
+        require(periodIndex <= ali.getMaxiumPeriodIndex(), 'Incentive: period invalid');
+        return pow(ali.getKeepPercent(), periodIndex).mul(ali.getInitialRewardPerBlock()).div(pow(100, periodIndex));
+    }
+
+    /**
+     * @notice Calculate the block number corresponding to each milestone at the beginning of each period.
+     * @param periodIndex The period index. The period index must be between [0, maxiumPeriodIndex]
+     * @return A number representing the block number of the milestone at the beginning of the period.
+     */
+    function getBlockNumberOfMilestone(uint periodIndex) public view returns (uint) {
+        require(periodIndex <= ali.getMaxiumPeriodIndex(), 'Incentive: period invalid');
+        return ali.getBlockPerPeriod().mul(periodIndex).add(startBlock);
+    }
+
+    /**
+     * @notice Determine the period corresponding to any block number.
+     * @param blockNumber The block number. The block number must be >= startBlock
+     * @return A number representing period index of the input block number.
+     */
+    function getPeriodIndexByBlockNumber(uint blockNumber) public view returns (uint) {
+        require(blockNumber >= startBlock, 'Incentive: blockNumber invalid');
+        return blockNumber.sub(startBlock).div(ali.getBlockPerPeriod());
+    }
+
+    /**
+     * @notice Calculate the reward that can be claimed from the last received time to the present time.
+     * @return A number representing the reclamable ALI tokens. Result is scaled by 1e18.
+     */
+    function getClaimableReward(uint lastRewardBlock) public view returns (uint) {
+        uint currentBlock = block.number;
+        require(currentBlock >= startBlock, 'Incentive: currentBlock invalid');
+
+        uint lastClaimPeriod = getPeriodIndexByBlockNumber(lastRewardBlock); 
+        uint currentPeriod = getPeriodIndexByBlockNumber(currentBlock);
+        
+        uint startCalculationBlock = lastRewardBlock; 
+        uint sum = 0; 
+        
+        for(uint i = lastClaimPeriod ; i  <= currentPeriod ; i++) { 
+            uint nextBlock = i < currentPeriod ? getBlockNumberOfMilestone(i+1) : currentBlock;
+            uint delta = nextBlock.sub(startCalculationBlock);
+            sum = sum.add(delta.mul(getRewardPerBlock(i)));
+            startCalculationBlock = nextBlock; 
+        } 
+        return sum;
     }
 }
