@@ -72,12 +72,10 @@ contract MasterChef is Ownable {
     constructor(
         AliToken _ali,
         Staking _staking,
-        // uint256 _alitaPerBlock,
         uint256 _startBlock
     ) public {
         ali = _ali;
         staking = _staking;
-        // alitaPerBlock = _alitaPerBlock;
         startBlock = _startBlock;
 
         // staking pool
@@ -103,7 +101,7 @@ contract MasterChef is Ownable {
             massUpdatePools();
         }
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
-        totalAllocPoint = totalAllocPoint.add(_allocPoint);
+        // totalAllocPoint = totalAllocPoint.add(_allocPoint);
         poolInfo.push(PoolInfo({
             lpToken: _lpToken,
             allocPoint: _allocPoint,
@@ -121,7 +119,7 @@ contract MasterChef is Ownable {
         uint256 prevAllocPoint = poolInfo[_pid].allocPoint;
         poolInfo[_pid].allocPoint = _allocPoint;
         if (prevAllocPoint != _allocPoint) {
-            totalAllocPoint = totalAllocPoint.sub(prevAllocPoint).add(_allocPoint);
+            // totalAllocPoint = totalAllocPoint.sub(prevAllocPoint).add(_allocPoint);
             updateStakingPool();
         }
     }
@@ -133,9 +131,8 @@ contract MasterChef is Ownable {
             points = points.add(poolInfo[pid].allocPoint);
         }
         if (points != 0) {
-            points = points.div(2);
-            totalAllocPoint = totalAllocPoint.sub(poolInfo[0].allocPoint).add(points);
             poolInfo[0].allocPoint = points;
+            totalAllocPoint = points.mul(2);
         }
     }
 
@@ -365,7 +362,8 @@ contract MasterChef is Ownable {
             uint delta = nextBlock.sub(startCalculationBlock);
             sum = sum.add(delta.mul(getRewardPerBlock(i)));
             startCalculationBlock = nextBlock;
-        } 
+        }
+        sum = sum.mul(ali.getMasterChefWeight()).div(100);
         return sum;
     }
 }

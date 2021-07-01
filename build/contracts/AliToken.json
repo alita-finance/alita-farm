@@ -1,0 +1,1509 @@
+{
+  "contractName": "AliToken",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getOwner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getKeepPercent",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getInitialRewardPerBlock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMaxiumPeriodIndex",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBlockPerPeriod",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMasterChefWeight",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIncentiveWeight",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "mint",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBlockPerPeriod\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIncentiveWeight\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getInitialRewardPerBlock\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getKeepPercent\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMasterChefWeight\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMaxiumPeriodIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getOwner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"allowance(address,address)\":{\"details\":\"Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called.\"},\"approve(address,uint256)\":{\"details\":\"Sets `amount` as the allowance of `spender` over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an {Approval} event.\"},\"balanceOf(address)\":{\"details\":\"Returns the amount of tokens owned by `account`.\"},\"decimals()\":{\"details\":\"Returns the token decimals.\"},\"getOwner()\":{\"details\":\"Returns the bep token owner.\"},\"name()\":{\"details\":\"Returns the token name.\"},\"symbol()\":{\"details\":\"Returns the token symbol.\"},\"totalSupply()\":{\"details\":\"Returns the amount of tokens in existence.\"},\"transfer(address,uint256)\":{\"details\":\"Moves `amount` tokens from the caller's account to `recipient`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event.\"},\"transferFrom(address,address,uint256)\":{\"details\":\"Moves `amount` tokens from `sender` to `recipient` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/luandt/workplace/vndai-defi/farm/contracts/ALIToken.sol\":\"AliToken\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/luandt/workplace/vndai-defi/farm/contracts/ALIToken.sol\":{\"keccak256\":\"0xbd82e2de6d2602ce1ec0814b6d7b788b956d049c37b8dd77f6834c44390c65cd\",\"urls\":[\"bzz-raw://603d1775af9752dec1c7aeca0f4dab4424d61a2970056f72188e17a1860e91ce\",\"dweb:/ipfs/QmVNdKmS4J9WjfZVVBvVg1i1FxNiF7LHGaXyvW9TzKwjAz\"]},\"@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol\":{\"keccak256\":\"0xcca9eeefad9d3c8a68e426833a5c790d055beebc3f1cefbeac20b096456c9aef\",\"license\":\"GPL-3.0-or-later\",\"urls\":[\"bzz-raw://61090ac66da4fcf117cb95119cda4c45b5bcf9f8a48203444b0f97b39a9ccbd1\",\"dweb:/ipfs/Qmb1XnfUGdZ7ma31WqhGMaE9mWug1erEUh8xEYvvjZ5v4r\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity >=0.6.12;\n\nimport \"@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol\";\n\ninterface AliToken is IBEP20 {\n\n    function getKeepPercent() external view returns(uint);\n\n    function getInitialRewardPerBlock() external view returns(uint);\n\n    function getMaxiumPeriodIndex() external view returns(uint);\n\n    function getBlockPerPeriod() external view returns(uint);\n    \n    function getMasterChefWeight() external view returns(uint);\n\n    function getIncentiveWeight() external view returns(uint);\n\n    function mint(address _to, uint256 _amount) external;\n\n}",
+  "sourcePath": "/home/luandt/workplace/vndai-defi/farm/contracts/ALIToken.sol",
+  "ast": {
+    "absolutePath": "/home/luandt/workplace/vndai-defi/farm/contracts/ALIToken.sol",
+    "exportedSymbols": {
+      "AliToken": [
+        42
+      ]
+    },
+    "id": 43,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:25:0"
+      },
+      {
+        "absolutePath": "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
+        "file": "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
+        "id": 2,
+        "nodeType": "ImportDirective",
+        "scope": 43,
+        "sourceUnit": 1969,
+        "src": "27:72:0",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3,
+              "name": "IBEP20",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1968,
+              "src": "123:6:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IBEP20_$1968",
+                "typeString": "contract IBEP20"
+              }
+            },
+            "id": 4,
+            "nodeType": "InheritanceSpecifier",
+            "src": "123:6:0"
+          }
+        ],
+        "contractDependencies": [
+          1968
+        ],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 42,
+        "linearizedBaseContracts": [
+          42,
+          1968
+        ],
+        "name": "AliToken",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "880afb66",
+            "id": 9,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getKeepPercent",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 5,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "160:2:0"
+            },
+            "returnParameters": {
+              "id": 8,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 9,
+                  "src": "185:4:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "185:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "184:6:0"
+            },
+            "scope": 42,
+            "src": "137:54:0",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "eb6314d6",
+            "id": 14,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getInitialRewardPerBlock",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 10,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "230:2:0"
+            },
+            "returnParameters": {
+              "id": 13,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 12,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 14,
+                  "src": "255:4:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 11,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "255:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "254:6:0"
+            },
+            "scope": 42,
+            "src": "197:64:0",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "bb9dd8f2",
+            "id": 19,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMaxiumPeriodIndex",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 15,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "296:2:0"
+            },
+            "returnParameters": {
+              "id": 18,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 17,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 19,
+                  "src": "321:4:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "321:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "320:6:0"
+            },
+            "scope": 42,
+            "src": "267:60:0",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "502ea883",
+            "id": 24,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBlockPerPeriod",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 20,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "359:2:0"
+            },
+            "returnParameters": {
+              "id": 23,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 22,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 24,
+                  "src": "384:4:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 21,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "384:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "383:6:0"
+            },
+            "scope": 42,
+            "src": "333:57:0",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "2e9e9b6d",
+            "id": 29,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMasterChefWeight",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 25,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "428:2:0"
+            },
+            "returnParameters": {
+              "id": 28,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 27,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 29,
+                  "src": "453:4:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 26,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "453:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "452:6:0"
+            },
+            "scope": 42,
+            "src": "400:59:0",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "0e3b86e1",
+            "id": 34,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getIncentiveWeight",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 30,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "492:2:0"
+            },
+            "returnParameters": {
+              "id": 33,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 32,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 34,
+                  "src": "517:4:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 31,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "517:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "516:6:0"
+            },
+            "scope": 42,
+            "src": "465:58:0",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "40c10f19",
+            "id": 41,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "mint",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 39,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 36,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 41,
+                  "src": "543:11:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 35,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "543:7:0",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 38,
+                  "mutability": "mutable",
+                  "name": "_amount",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 41,
+                  "src": "556:15:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 37,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "556:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "542:30:0"
+            },
+            "returnParameters": {
+              "id": 40,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "581:0:0"
+            },
+            "scope": 42,
+            "src": "529:53:0",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 43,
+        "src": "101:484:0"
+      }
+    ],
+    "src": "0:585:0"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "/home/luandt/workplace/vndai-defi/farm/contracts/ALIToken.sol",
+      "exportedSymbols": {
+        "AliToken": [
+          42
+        ]
+      },
+      "license": null
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            ">=",
+            "0.6",
+            ".12"
+          ]
+        },
+        "id": 1,
+        "name": "PragmaDirective",
+        "src": "0:25:0"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 1969,
+          "absolutePath": "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
+          "file": "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
+          "scope": 43,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2,
+        "name": "ImportDirective",
+        "src": "27:72:0"
+      },
+      {
+        "attributes": {
+          "abstract": false,
+          "contractDependencies": [
+            1968
+          ],
+          "contractKind": "interface",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            42,
+            1968
+          ],
+          "name": "AliToken",
+          "scope": 43
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": null
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "IBEP20",
+                  "referencedDeclaration": 1968,
+                  "type": "contract IBEP20"
+                },
+                "id": 3,
+                "name": "UserDefinedTypeName",
+                "src": "123:6:0"
+              }
+            ],
+            "id": 4,
+            "name": "InheritanceSpecifier",
+            "src": "123:6:0"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "880afb66",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getKeepPercent",
+              "overrides": null,
+              "scope": 42,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 5,
+                "name": "ParameterList",
+                "src": "160:2:0"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 9,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 6,
+                        "name": "ElementaryTypeName",
+                        "src": "185:4:0"
+                      }
+                    ],
+                    "id": 7,
+                    "name": "VariableDeclaration",
+                    "src": "185:4:0"
+                  }
+                ],
+                "id": 8,
+                "name": "ParameterList",
+                "src": "184:6:0"
+              }
+            ],
+            "id": 9,
+            "name": "FunctionDefinition",
+            "src": "137:54:0"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "eb6314d6",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getInitialRewardPerBlock",
+              "overrides": null,
+              "scope": 42,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 10,
+                "name": "ParameterList",
+                "src": "230:2:0"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 14,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 11,
+                        "name": "ElementaryTypeName",
+                        "src": "255:4:0"
+                      }
+                    ],
+                    "id": 12,
+                    "name": "VariableDeclaration",
+                    "src": "255:4:0"
+                  }
+                ],
+                "id": 13,
+                "name": "ParameterList",
+                "src": "254:6:0"
+              }
+            ],
+            "id": 14,
+            "name": "FunctionDefinition",
+            "src": "197:64:0"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "bb9dd8f2",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getMaxiumPeriodIndex",
+              "overrides": null,
+              "scope": 42,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 15,
+                "name": "ParameterList",
+                "src": "296:2:0"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 19,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 16,
+                        "name": "ElementaryTypeName",
+                        "src": "321:4:0"
+                      }
+                    ],
+                    "id": 17,
+                    "name": "VariableDeclaration",
+                    "src": "321:4:0"
+                  }
+                ],
+                "id": 18,
+                "name": "ParameterList",
+                "src": "320:6:0"
+              }
+            ],
+            "id": 19,
+            "name": "FunctionDefinition",
+            "src": "267:60:0"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "502ea883",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getBlockPerPeriod",
+              "overrides": null,
+              "scope": 42,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20,
+                "name": "ParameterList",
+                "src": "359:2:0"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 24,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 21,
+                        "name": "ElementaryTypeName",
+                        "src": "384:4:0"
+                      }
+                    ],
+                    "id": 22,
+                    "name": "VariableDeclaration",
+                    "src": "384:4:0"
+                  }
+                ],
+                "id": 23,
+                "name": "ParameterList",
+                "src": "383:6:0"
+              }
+            ],
+            "id": 24,
+            "name": "FunctionDefinition",
+            "src": "333:57:0"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "2e9e9b6d",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getMasterChefWeight",
+              "overrides": null,
+              "scope": 42,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 25,
+                "name": "ParameterList",
+                "src": "428:2:0"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 29,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 26,
+                        "name": "ElementaryTypeName",
+                        "src": "453:4:0"
+                      }
+                    ],
+                    "id": 27,
+                    "name": "VariableDeclaration",
+                    "src": "453:4:0"
+                  }
+                ],
+                "id": 28,
+                "name": "ParameterList",
+                "src": "452:6:0"
+              }
+            ],
+            "id": 29,
+            "name": "FunctionDefinition",
+            "src": "400:59:0"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "0e3b86e1",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getIncentiveWeight",
+              "overrides": null,
+              "scope": 42,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 30,
+                "name": "ParameterList",
+                "src": "492:2:0"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 34,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 31,
+                        "name": "ElementaryTypeName",
+                        "src": "517:4:0"
+                      }
+                    ],
+                    "id": 32,
+                    "name": "VariableDeclaration",
+                    "src": "517:4:0"
+                  }
+                ],
+                "id": 33,
+                "name": "ParameterList",
+                "src": "516:6:0"
+              }
+            ],
+            "id": 34,
+            "name": "FunctionDefinition",
+            "src": "465:58:0"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "40c10f19",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "mint",
+              "overrides": null,
+              "scope": 42,
+              "stateMutability": "nonpayable",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_to",
+                      "overrides": null,
+                      "scope": 41,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 35,
+                        "name": "ElementaryTypeName",
+                        "src": "543:7:0"
+                      }
+                    ],
+                    "id": 36,
+                    "name": "VariableDeclaration",
+                    "src": "543:11:0"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_amount",
+                      "overrides": null,
+                      "scope": 41,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 37,
+                        "name": "ElementaryTypeName",
+                        "src": "556:7:0"
+                      }
+                    ],
+                    "id": 38,
+                    "name": "VariableDeclaration",
+                    "src": "556:15:0"
+                  }
+                ],
+                "id": 39,
+                "name": "ParameterList",
+                "src": "542:30:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 40,
+                "name": "ParameterList",
+                "src": "581:0:0"
+              }
+            ],
+            "id": 41,
+            "name": "FunctionDefinition",
+            "src": "529:53:0"
+          }
+        ],
+        "id": 42,
+        "name": "ContractDefinition",
+        "src": "101:484:0"
+      }
+    ],
+    "id": 43,
+    "name": "SourceUnit",
+    "src": "0:585:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.12+commit.27d51765.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-07-01T07:43:57.418Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "allowance(address,address)": {
+        "details": "Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called."
+      },
+      "approve(address,uint256)": {
+        "details": "Sets `amount` as the allowance of `spender` over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an {Approval} event."
+      },
+      "balanceOf(address)": {
+        "details": "Returns the amount of tokens owned by `account`."
+      },
+      "decimals()": {
+        "details": "Returns the token decimals."
+      },
+      "getOwner()": {
+        "details": "Returns the bep token owner."
+      },
+      "name()": {
+        "details": "Returns the token name."
+      },
+      "symbol()": {
+        "details": "Returns the token symbol."
+      },
+      "totalSupply()": {
+        "details": "Returns the amount of tokens in existence."
+      },
+      "transfer(address,uint256)": {
+        "details": "Moves `amount` tokens from the caller's account to `recipient`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+      },
+      "transferFrom(address,address,uint256)": {
+        "details": "Moves `amount` tokens from `sender` to `recipient` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

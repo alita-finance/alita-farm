@@ -11,6 +11,10 @@ interface AliToken is IBEP20 {
     function getMaxiumPeriodIndex() external view returns(uint);
 
     function getBlockPerPeriod() external view returns(uint);
+    
+    function getMasterChefWeight() external view returns(uint);
+
+    function getIncentiveWeight() external view returns(uint);
 
     function mint(address _to, uint256 _amount) external;
 
