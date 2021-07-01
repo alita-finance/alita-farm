@@ -53,10 +53,6 @@ contract MasterChef is Ownable {
     // The ali TOKEN!
     AliToken public ali;
     Staking public staking;
-    // ali tokens created per block.
-    // uint256 public alitaPerBlock;
-    // Bonus muliplier for early ali makers.
-    uint256 public BONUS_MULTIPLIER = 1;
     // The migrator contract. It has a lot of power. Can only be set through governance (owner).
     IMigratorChef public migrator;
 
@@ -94,10 +90,6 @@ contract MasterChef is Ownable {
 
         totalAllocPoint = 1000;
 
-    }
-
-    function updateMultiplier(uint256 multiplierNumber) public onlyOwner {
-        BONUS_MULTIPLIER = multiplierNumber;
     }
 
     function poolLength() external view returns (uint256) {
@@ -164,11 +156,6 @@ contract MasterChef is Ownable {
         pool.lpToken = newLpToken;
     }
 
-    // Return reward multiplier over the given _from to _to block.
-    function getMultiplier(uint256 _from, uint256 _to) public view returns (uint256) {
-        return _to.sub(_from).mul(BONUS_MULTIPLIER);
-    }
-
     // View function to see pending alitas on frontend.
     function pendingALI(uint256 _pid, address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
@@ -176,8 +163,7 @@ contract MasterChef is Ownable {
         uint256 accALIPerShare = pool.accALIPerShare;
         uint256 lpSupply = pool.lpToken.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
-            uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-            uint256 alitaReward = multiplier.mul(getClaimableReward(pool.lastRewardBlock)).mul(pool.allocPoint).div(totalAllocPoint);
+            uint256 alitaReward = getClaimableReward(pool.lastRewardBlock).mul(pool.allocPoint).div(totalAllocPoint);
             accALIPerShare = accALIPerShare.add(alitaReward.mul(1e12).div(lpSupply));
         }
         return user.amount.mul(accALIPerShare).div(1e12).sub(user.rewardDebt);
@@ -203,8 +189,7 @@ contract MasterChef is Ownable {
             pool.lastRewardBlock = block.number;
             return;
         }
-        uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 alitaReward = multiplier.mul(getClaimableReward(pool.lastRewardBlock)).mul(pool.allocPoint).div(totalAllocPoint);
+        uint256 alitaReward = getClaimableReward(pool.lastRewardBlock).mul(pool.allocPoint).div(totalAllocPoint);
         ali.mint(address(staking), alitaReward);
         pool.accALIPerShare = pool.accALIPerShare.add(alitaReward.mul(1e12).div(lpSupply));
         pool.lastRewardBlock = block.number;
@@ -379,7 +364,7 @@ contract MasterChef is Ownable {
             uint nextBlock = i < currentPeriod ? getBlockNumberOfMilestone(i+1) : currentBlock;
             uint delta = nextBlock.sub(startCalculationBlock);
             sum = sum.add(delta.mul(getRewardPerBlock(i)));
-            startCalculationBlock = nextBlock; 
+            startCalculationBlock = nextBlock;
         } 
         return sum;
     }
