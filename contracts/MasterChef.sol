@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 pragma solidity 0.6.12;
 
 import '@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol';
@@ -65,6 +67,9 @@ contract MasterChef is Ownable {
     // The block number when ali mining starts.
     uint256 public startBlock;
 
+    // The percentage of ALI token rewards distributed to ALI pool
+    uint256 public aliPoolPercent = 50;
+
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
@@ -131,8 +136,10 @@ contract MasterChef is Ownable {
             points = points.add(poolInfo[pid].allocPoint);
         }
         if (points != 0) {
-            poolInfo[0].allocPoint = points;
-            totalAllocPoint = points.mul(2);
+            uint denominator = 100 - aliPoolPercent;
+            uint aliPoints = aliPoolPercent.mul(points).div(denominator);
+            poolInfo[0].allocPoint = aliPoints;
+            totalAllocPoint = aliPoints + points;
         }
     }
 
@@ -345,6 +352,7 @@ contract MasterChef is Ownable {
 
     /**
      * @notice Calculate the reward that can be claimed from the last received time to the present time.
+     * @param lastRewardBlock The block number of the last received time 
      * @return A number representing the reclamable ALI tokens. Result is scaled by 1e18.
      */
     function getClaimableReward(uint lastRewardBlock) public view returns (uint) {
@@ -365,5 +373,11 @@ contract MasterChef is Ownable {
         }
         sum = sum.mul(ali.getMasterChefWeight()).div(100);
         return sum;
+    }
+
+    function setKeepPercent(uint _aliPoolPercent) public onlyOwner {
+        require(_aliPoolPercent > 0 , "MasterChef::_aliPoolPercent: _aliPoolPercent must be greater 0");
+        require(_aliPoolPercent <= 100 , "MasterChef::_aliPoolPercent: _aliPoolPercent must be less or equal 100");
+        aliPoolPercent = _aliPoolPercent;
     }
 }
