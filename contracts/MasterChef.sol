@@ -326,8 +326,12 @@ contract MasterChef is Ownable {
      * @return A number representing the reward token per block at specific period. Result is scaled by 1e18.
      */
     function getRewardPerBlock(uint periodIndex) public view returns (uint) {
-        require(periodIndex <= ali.getMaxiumPeriodIndex(), 'Incentive: period invalid');
-        return pow(ali.getKeepPercent(), periodIndex).mul(ali.getInitialRewardPerBlock()).div(pow(100, periodIndex));
+        if(periodIndex > ali.getMaxiumPeriodIndex()){
+            return 0;
+        }
+        else{
+            return pow(ali.getKeepPercent(), periodIndex).mul(ali.getInitialRewardPerBlock()).div(pow(100, periodIndex));
+        }
     }
 
     /**
@@ -336,7 +340,6 @@ contract MasterChef is Ownable {
      * @return A number representing the block number of the milestone at the beginning of the period.
      */
     function getBlockNumberOfMilestone(uint periodIndex) public view returns (uint) {
-        require(periodIndex <= ali.getMaxiumPeriodIndex(), 'Incentive: period invalid');
         return ali.getBlockPerPeriod().mul(periodIndex).add(startBlock);
     }
 
@@ -346,7 +349,7 @@ contract MasterChef is Ownable {
      * @return A number representing period index of the input block number.
      */
     function getPeriodIndexByBlockNumber(uint blockNumber) public view returns (uint) {
-        require(blockNumber >= startBlock, 'Incentive: blockNumber invalid');
+        require(blockNumber >= startBlock, 'MasterChef: blockNumber must be greater or equal startBlock');
         return blockNumber.sub(startBlock).div(ali.getBlockPerPeriod());
     }
 
@@ -356,8 +359,11 @@ contract MasterChef is Ownable {
      * @return A number representing the reclamable ALI tokens. Result is scaled by 1e18.
      */
     function getClaimableReward(uint lastRewardBlock) public view returns (uint) {
-        uint currentBlock = block.number;
-        require(currentBlock >= startBlock, 'Incentive: currentBlock invalid');
+        uint maxBlock = getBlockNumberOfMilestone(ali.getMaxiumPeriodIndex());
+        uint currentBlock = block.number > maxBlock ? maxBlock: block.number;
+
+        require(currentBlock >= startBlock, 'MasterChef: currentBlock must be greater or equal startBlock');
+        require(lastRewardBlock < currentBlock , 'MasterChef: lastRewardBlock must be less than currentBlock');
 
         uint lastClaimPeriod = getPeriodIndexByBlockNumber(lastRewardBlock); 
         uint currentPeriod = getPeriodIndexByBlockNumber(currentBlock);
