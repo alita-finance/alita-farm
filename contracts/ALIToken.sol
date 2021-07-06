@@ -10,7 +10,7 @@ interface AliToken is IBEP20 {
 
     function getInitialRewardPerBlock() external view returns(uint);
 
-    function getMaxiumPeriodIndex() external view returns(uint);
+    function getMaximumPeriodIndex() external view returns(uint);
 
     function getBlockPerPeriod() external view returns(uint);
     
