@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "migrate": "truffle migrate --network bscTestnet --reset",
-    "compile": "truffle compile",
-    "test": "npx builder test",
+    "compile": "npx truffle compile",
+    "migrate": "npx truffle migrate --reset --network bscTestnet",
+    "verify:bscTestnet": "npx truffle run verify MasterChef --network bscTestnet",
+    "verify:bscMainnet": "npx truffle run verify MasterChef --network bscMainnet",
+    "test": "npx truffle test",
     "coverage": "npx builder coverage"
   },
   "dependencies": {
     "@openzeppelin/test-helpers": "^0.5.6",
     "@pancakeswap/pancake-swap-lib": "^0.0.1",
+    "dotenv": "^8.2.0",
     "truffle": "^5.1.58",
     "truffle-flattener": "^1.4.4"
   },
@@ -25,7 +28,7 @@
     "ethers": "^5.0.14",
     "solidity-coverage": "^0.7.13",
     "truffle-hdwallet-provider": "^1.0.17",
-    "truffle-plugin-verify": "^0.4.0",
+    "truffle-plugin-verify": "^0.5.7",
     "web3": "^1.3.0"
   }
 }
