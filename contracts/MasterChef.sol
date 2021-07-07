@@ -363,7 +363,6 @@ contract MasterChef is Ownable {
         uint currentBlock = block.number > maxBlock ? maxBlock: block.number;
 
         require(currentBlock >= startBlock, 'MasterChef: currentBlock must be greater or equal startBlock');
-        require(lastRewardBlock < currentBlock , 'MasterChef: lastRewardBlock must be less than currentBlock');
 
         uint lastClaimPeriod = getPeriodIndexByBlockNumber(lastRewardBlock); 
         uint currentPeriod = getPeriodIndexByBlockNumber(currentBlock);
