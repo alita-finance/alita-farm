@@ -12,10 +12,6 @@ import "./Staking.sol";
 
 // import "@nomiclabs/buidler/console.sol";
 
-interface IMigratorChef {
-    function migrate(IBEP20 token) external returns (IBEP20);
-}
-
 // MasterChef is the master of ali. He can make ali and he is a fair guy.
 //
 // Note that it's ownable and the owner wields tremendous power. The ownership
@@ -55,8 +51,6 @@ contract MasterChef is Ownable {
     // The ali TOKEN!
     AliToken public ali;
     Staking public staking;
-    // The migrator contract. It has a lot of power. Can only be set through governance (owner).
-    IMigratorChef public migrator;
 
     // Info of each pool.
     PoolInfo[] public poolInfo;
@@ -141,23 +135,6 @@ contract MasterChef is Ownable {
             poolInfo[0].allocPoint = aliPoints;
             totalAllocPoint = aliPoints + points;
         }
-    }
-
-    // Set the migrator contract. Can only be called by the owner.
-    function setMigrator(IMigratorChef _migrator) public onlyOwner {
-        migrator = _migrator;
-    }
-
-    // Migrate lp token to another lp contract. Can be called by anyone. We trust that migrator contract is good.
-    function migrate(uint256 _pid) public {
-        require(address(migrator) != address(0), "migrate: no migrator");
-        PoolInfo storage pool = poolInfo[_pid];
-        IBEP20 lpToken = pool.lpToken;
-        uint256 bal = lpToken.balanceOf(address(this));
-        lpToken.safeApprove(address(migrator), bal);
-        IBEP20 newLpToken = migrator.migrate(lpToken);
-        require(bal == newLpToken.balanceOf(address(this)), "migrate: bad");
-        pool.lpToken = newLpToken;
     }
 
     // View function to see pending alitas on frontend.
