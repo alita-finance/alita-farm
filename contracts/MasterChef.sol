@@ -68,6 +68,10 @@ contract MasterChef is Ownable {
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
+    modifier validatePoolByPid(uint256 _pid) {
+        require (_pid < poolInfo.length, "Pool does not exist") ;
+        _;
+    }
     constructor(
         AliToken _ali,
         Staking _staking,
@@ -100,7 +104,6 @@ contract MasterChef is Ownable {
             massUpdatePools();
         }
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
-        // totalAllocPoint = totalAllocPoint.add(_allocPoint);
         poolInfo.push(PoolInfo({
             lpToken: _lpToken,
             allocPoint: _allocPoint,
@@ -111,14 +114,16 @@ contract MasterChef is Ownable {
     }
 
     // Update the given pool's ali allocation point. Can only be called by the owner.
-    function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public onlyOwner {
+    function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public validatePoolByPid(_pid) onlyOwner {
+        if(_pid == 0){
+            return;
+        }
         if (_withUpdate) {
             massUpdatePools();
         }
         uint256 prevAllocPoint = poolInfo[_pid].allocPoint;
         poolInfo[_pid].allocPoint = _allocPoint;
         if (prevAllocPoint != _allocPoint) {
-            // totalAllocPoint = totalAllocPoint.sub(prevAllocPoint).add(_allocPoint);
             updateStakingPool();
         }
     }
@@ -138,7 +143,7 @@ contract MasterChef is Ownable {
     }
 
     // View function to see pending alitas on frontend.
-    function pendingALI(uint256 _pid, address _user) external view returns (uint256) {
+    function pendingALI(uint256 _pid, address _user) external view validatePoolByPid(_pid) returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
         uint256 accALIPerShare = pool.accALIPerShare;
@@ -160,7 +165,7 @@ contract MasterChef is Ownable {
 
 
     // Update reward variables of the given pool to be up-to-date.
-    function updatePool(uint256 _pid) public {
+    function updatePool(uint256 _pid) public validatePoolByPid(_pid) {
         PoolInfo storage pool = poolInfo[_pid];
         if (block.number <= pool.lastRewardBlock) {
             return;
@@ -177,7 +182,7 @@ contract MasterChef is Ownable {
     }
 
     // Deposit LP tokens to MasterChef for ali allocation.
-    function deposit(uint256 _pid, uint256 _amount) public {
+    function deposit(uint256 _pid, uint256 _amount) public validatePoolByPid(_pid) {
 
         require (_pid != 0, 'deposit ali by staking');
 
@@ -199,7 +204,7 @@ contract MasterChef is Ownable {
     }
 
     // Withdraw LP tokens from MasterChef.
-    function withdraw(uint256 _pid, uint256 _amount) public {
+    function withdraw(uint256 _pid, uint256 _amount) public validatePoolByPid(_pid) {
 
         require (_pid != 0, 'withdraw ali by unstaking');
         PoolInfo storage pool = poolInfo[_pid];
@@ -236,7 +241,6 @@ contract MasterChef is Ownable {
         }
         user.rewardDebt = user.amount.mul(pool.accALIPerShare).div(1e12);
 
-        // staking.mint(msg.sender, _amount);
         emit Deposit(msg.sender, 0, _amount);
     }
 
@@ -256,12 +260,11 @@ contract MasterChef is Ownable {
         }
         user.rewardDebt = user.amount.mul(pool.accALIPerShare).div(1e12);
 
-        // staking.burn(msg.sender, _amount);
         emit Withdraw(msg.sender, 0, _amount);
     }
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
-    function emergencyWithdraw(uint256 _pid) public {
+    function emergencyWithdraw(uint256 _pid) public validatePoolByPid(_pid){
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         pool.lpToken.safeTransfer(address(msg.sender), user.amount);
